@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Student {
+public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long Id;
@@ -43,7 +43,7 @@ public class Student {
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
   private Set<Subject> subjects;
 
-  public Student() {
+  public User() {
   }
 
   public Long getId() {
