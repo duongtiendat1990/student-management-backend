@@ -3,7 +3,7 @@ package com.sopen.studentmanagement.model;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-
+@Entity
 public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

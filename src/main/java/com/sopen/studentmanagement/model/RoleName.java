@@ -1,6 +1,6 @@
 package com.sopen.studentmanagement.model;
 
 public enum RoleName {
-  STUDENT,
-  ADMIN,
+  ROLE_STUDENT,
+  ROLE_ADMIN,
 }

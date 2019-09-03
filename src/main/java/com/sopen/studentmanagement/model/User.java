@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,9 @@ public class User {
   private String name;
 
   @Column(unique = true)
-  private String code;
+  private String username;
+
+  private String password;
 
   private Date birthday;
 
@@ -23,11 +26,13 @@ public class User {
 
   @Column(unique = true)
   @Pattern(regexp = "0([0-9]{9,10})")
-  private Integer phoneNumber;
+  private String phoneNumber;
 
   @Column(nullable = false, unique = true)
   @Email
   private String email;
+
+  private boolean enabled;
 
   private String note;
 
@@ -42,6 +47,13 @@ public class User {
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
   private Set<Subject> subjects;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_roles",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles = new HashSet<>();
+
 
   public User() {
   }
@@ -62,12 +74,20 @@ public class User {
     this.name = name;
   }
 
-  public String getCode() {
-    return code;
+  public String getUsername() {
+    return username;
   }
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public Date getBirthday() {
@@ -86,11 +106,11 @@ public class User {
     this.hometown = hometown;
   }
 
-  public Integer getPhoneNumber() {
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(Integer phoneNumber) {
+  public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
@@ -100,6 +120,14 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   public String getNote() {
@@ -124,5 +152,13 @@ public class User {
 
   public void setSubjects(Set<Subject> subjects) {
     this.subjects = subjects;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 }
