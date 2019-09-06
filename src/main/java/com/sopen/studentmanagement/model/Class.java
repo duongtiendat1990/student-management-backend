@@ -1,6 +1,9 @@
 package com.sopen.studentmanagement.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,13 +16,17 @@ public class Class {
   private String name;
 
   @Column(unique = true)
+  @NotNull
   private String code;
 
+  @NotNull
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private Date time;
 
   private String note;
 
   @ManyToOne
+  @NotNull
   private Subject subject;
 
   public Class() {

@@ -5,10 +5,7 @@ import com.sopen.studentmanagement.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -61,5 +58,61 @@ public class UserRepositoryImpl implements UserRepository {
     } catch (NoResultException e){
       throw new UsernameNotFoundException("User Not Found with -> username: " + username);
     }
+  }
+
+  @Override
+  public User findByEmail(String email) {
+    TypedQuery<User> query = em.createQuery("select u from User u where u.email=:email", User.class);
+    query.setParameter("email", email);
+    try{
+      return query.getSingleResult();
+    } catch (NoResultException e){
+     return null;
+    }
+  }
+
+  @Override
+  public User findByPhoneNumber(String phoneNumber) {
+    TypedQuery<User> query = em.createQuery("select u from User u where u.phoneNumber=:phoneNumber", User.class);
+    query.setParameter("phoneNumber", phoneNumber);
+    try{
+      return query.getSingleResult();
+    } catch (NoResultException e){
+      return null;
+    }
+  }
+
+  @Override
+  public List<User> findAllStudent() {
+    Query query = em.createNativeQuery("select u.* from User u inner join user_roles ur on ur.user_id = u.id inner join role r on r.id = ur.role_id where r.name = 'ROLE_STUDENT'", User.class);
+    return query.getResultList();
+  }
+
+  @Override
+  public boolean existsByUsername(String username) {
+
+      try {
+        findByUserName(username);
+        return true;
+      } catch (UsernameNotFoundException e){
+        return false;
+      }
+
+  }
+
+  @Override
+  public boolean existsByEmail(String email) {
+    if (findByEmail(email)!=null){
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean existsByPhoneNumber(String phoneNumber) {
+    if (findByPhoneNumber(phoneNumber)!=null){
+      return true;
+    }
+    return false;
   }
 }

@@ -4,7 +4,15 @@ import com.sopen.studentmanagement.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 public interface UserRepository extends Repository<User>{
   User findByUserName(String username) throws UsernameNotFoundException;
+  User findByEmail(String email);
+  User findByPhoneNumber(String phoneNumber);
+  List<User> findAllStudent();
+
+  boolean existsByUsername (String username);
+  boolean existsByEmail (String email);
+  boolean existsByPhoneNumber (String phoneNumber);
 }

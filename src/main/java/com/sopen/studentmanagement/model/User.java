@@ -1,7 +1,12 @@
 package com.sopen.studentmanagement.model;
 
+import com.sopen.studentmanagement.validators.annotation.UniqueEmail;
+import com.sopen.studentmanagement.validators.annotation.UniquePhoneNumber;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,16 +25,20 @@ public class User {
 
   private String password;
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  @Past
   private Date birthday;
 
   private String hometown;
 
   @Column(unique = true)
   @Pattern(regexp = "0([0-9]{9,10})")
+  @UniquePhoneNumber
   private String phoneNumber;
 
   @Column(nullable = false, unique = true)
   @Email
+  @UniqueEmail
   private String email;
 
   private boolean enabled;

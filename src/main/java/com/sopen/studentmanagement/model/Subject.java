@@ -1,6 +1,8 @@
 package com.sopen.studentmanagement.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -11,14 +13,18 @@ public class Subject {
 
   private String name;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
+  @NotNull
   private String code;
 
+  @NotNull
   private Double scoreFactor;
 
   private String note;
 
-  @OneToMany
+  @OneToMany(cascade=CascadeType.ALL)
+  @NotEmpty
+  @JoinColumn(name = "subject_id")
   private Set<Class> classes;
 
   public Subject() {
