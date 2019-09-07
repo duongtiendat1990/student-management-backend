@@ -2,6 +2,7 @@ package com.sopen.studentmanagement.model;
 
 import com.sopen.studentmanagement.validators.annotation.UniqueEmail;
 import com.sopen.studentmanagement.validators.annotation.UniquePhoneNumber;
+import com.sopen.studentmanagement.validators.annotation.UniqueUsername;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class User {
   private String name;
 
   @Column(unique = true)
+  @UniqueUsername
   private String username;
 
   private String password;
