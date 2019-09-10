@@ -42,4 +42,14 @@ public class SubjectServiceImpl implements SubjectService {
     public void remove(Long id) {
         subjectRepository.remove(id);
     }
+
+    @Override
+    public Subject findByCode(String code) {
+        return subjectRepository.findByCode(code);
+    }
+
+    @Override
+    public boolean existedByCode(String code) {
+        return subjectRepository.findByCode(code) != null;
+    }
 }

@@ -1,5 +1,7 @@
 package com.sopen.studentmanagement.model;
 
+import com.sopen.studentmanagement.validators.annotation.UniqueSubjectCode;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,7 @@ public class Subject {
 
   @Column(unique = true, nullable = false)
   @NotNull
+  @UniqueSubjectCode
   private String code;
 
   @NotNull

@@ -12,4 +12,8 @@ public interface SubjectService {
     void save(Subject subject);
 
     void remove(Long id);
+
+    Subject findByCode(String code);
+
+    boolean existedByCode(String code);
 }

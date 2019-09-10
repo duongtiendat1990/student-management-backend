@@ -1,5 +1,6 @@
 package com.sopen.studentmanagement.model;
 
+import com.sopen.studentmanagement.validators.annotation.UniqueClassCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Class {
 
   @Column(unique = true)
   @NotNull
+  @UniqueClassCode
   private String code;
 
   @NotNull

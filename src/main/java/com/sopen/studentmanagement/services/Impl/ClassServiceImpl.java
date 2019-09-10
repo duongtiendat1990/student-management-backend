@@ -37,4 +37,9 @@ public class ClassServiceImpl implements ClassService {
     public Class findByCode(String code) {
         return classRepository.findByCode(code);
     }
+
+    @Override
+    public boolean existedByCode(String code) {
+        return classRepository.findByCode(code)!=null;
+    }
 }

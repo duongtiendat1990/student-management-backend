@@ -14,4 +14,6 @@ public interface ClassService {
     void remove(Long id);
 
     Class findByCode(String code);
+
+    boolean existedByCode(String code);
 }
