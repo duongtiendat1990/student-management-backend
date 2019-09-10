@@ -2,11 +2,15 @@ package com.sopen.studentmanagement.controllers;
 
 import com.sopen.studentmanagement.message.request.LoginForm;
 import com.sopen.studentmanagement.message.response.JwtResponse;
+import com.sopen.studentmanagement.message.response.ResponseMessage;
+import com.sopen.studentmanagement.model.ConfirmationToken;
+import com.sopen.studentmanagement.model.User;
 import com.sopen.studentmanagement.repositories.ConfirmationTokenRepository;
 import com.sopen.studentmanagement.security.jwt.JwtProvider;
 import com.sopen.studentmanagement.security.services.EmailSenderService;
 import com.sopen.studentmanagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -55,5 +59,27 @@ public class PermittedController {
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities());
     return ResponseEntity.ok(jwtResponse);
+  }
+
+  @GetMapping(value = "confirm-account")
+  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
+    ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+    if (token != null) {
+      User user = userService.findByEmailIgnoreCase(token.getUser().getEmail());
+      if (user!=null){
+        user.setEnabled(true);
+        userService.save(user);
+        return new ResponseEntity<>(new ResponseMessage("User registered successfully!"),
+                HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(new ResponseMessage("Fail -> No user with this email has been found!"),
+                HttpStatus.BAD_REQUEST);
+      }
+
+    } else {
+      return new ResponseEntity<>(new ResponseMessage("Fail -> User's register occurred errors!"),
+              HttpStatus.BAD_REQUEST);
+    }
+
   }
 }

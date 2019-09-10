@@ -10,6 +10,7 @@ public interface UserRepository extends Repository<User>{
   User findByUserName(String username) throws UsernameNotFoundException;
   User findByEmail(String email);
   User findByPhoneNumber(String phoneNumber);
+  User findByEmailIgnoreCase(String email);
   List<User> findAllStudent();
 
   boolean existsByUsername (String username);

@@ -83,6 +83,17 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public User findByEmailIgnoreCase(String email) {
+    TypedQuery<User> query = em.createQuery("select u from User u where lower(u.email) like lower(:email)", User.class);
+    query.setParameter("email", email);
+    try{
+      return query.getSingleResult();
+    } catch (NoResultException e){
+      return null;
+    }
+  }
+
+  @Override
   public List<User> findAllStudent() {
     Query query = em.createNativeQuery("select u.* from User u inner join user_roles ur on ur.user_id = u.id inner join role r on r.id = ur.role_id where r.name = 'ROLE_STUDENT'", User.class);
     return query.getResultList();

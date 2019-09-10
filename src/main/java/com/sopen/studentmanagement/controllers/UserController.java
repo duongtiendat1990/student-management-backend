@@ -1,9 +1,11 @@
 package com.sopen.studentmanagement.controllers;
 
+import com.sopen.studentmanagement.message.response.ResponseMessage;
 import com.sopen.studentmanagement.model.Role;
 import com.sopen.studentmanagement.model.RoleName;
 import com.sopen.studentmanagement.model.User;
 import com.sopen.studentmanagement.repositories.RoleRepository;
+import com.sopen.studentmanagement.security.services.EmailSenderService;
 import com.sopen.studentmanagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,10 @@ public class UserController {
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  @GetMapping("/{id}")
+  @Autowired
+  private EmailSenderService emailSenderService;
+
+    @GetMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STUDENT')")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
     User user = userService.findById(id);
@@ -53,7 +58,13 @@ public class UserController {
     user.setRoles(roles);
     user.setPassword(passwordEncoder.encode("123456"));
     userService.save(user);
-    return new ResponseEntity<>(HttpStatus.OK);
+    emailSenderService.sendEmailCreateUser(user);
+    return new ResponseEntity<>(new ResponseMessage("Please notify student to login your email to confirm"),HttpStatus.OK);
   }
 
+  @PutMapping
+  @PreAuthorize("hasRole('ROLE_STUDENT')")
+  public ResponseEntity<?> enrollClass(@RequestBody Class aClass){
+      return null;
+  }
 }

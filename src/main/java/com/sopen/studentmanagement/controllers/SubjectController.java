@@ -16,36 +16,37 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/subjects")
 public class SubjectController {
-    @Autowired
-    SubjectService subjectService;
+  @Autowired
+  SubjectService subjectService;
 
-    @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createSubject(@Valid @RequestBody Subject subject){
-        subjectService.save(subject);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<?> createSubject(@Valid @RequestBody Subject subject) {
+    subjectService.save(subject);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<Subject>> getAllSubject(){
-        return new ResponseEntity< >(subjectService.findAll(), HttpStatus.OK);
-    }
+  @GetMapping
+  @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
+  public ResponseEntity<List<Subject>> getAllSubject() {
+    return new ResponseEntity<>(subjectService.findAll(), HttpStatus.OK);
+  }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Subject> getSubject(@PathVariable Long id){
-        return new ResponseEntity<>(subjectService.findById(id),HttpStatus.OK);
-    }
+  @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
+  public ResponseEntity<Subject> getSubject(@PathVariable Long id) {
+    return new ResponseEntity<>(subjectService.findById(id), HttpStatus.OK);
+  }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity updateSubject(@PathVariable Long id, @Valid@RequestBody Subject subject){
-        if(id.equals(subject.getId())){
-            subjectService.save(subject);
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+  @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
+  public ResponseEntity updateSubject(@PathVariable Long id, @Valid @RequestBody Subject subject) {
+    if (id.equals(subject.getId())) {
+      subjectService.save(subject);
+      return new ResponseEntity(HttpStatus.OK);
     }
+    else {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+  }
 }

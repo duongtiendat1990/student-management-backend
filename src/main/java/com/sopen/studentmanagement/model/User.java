@@ -51,13 +51,13 @@ public class User {
   @JoinTable(name = "student_class",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "class_id"))
-  private Set<Class> classes;
+  private Set<Class> classes = new HashSet<>();
 
   @ManyToMany
   @JoinTable(name = "student_subject",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
-  private Set<Subject> subjects;
+  private Set<Subject> subjects = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles",
