@@ -34,14 +34,14 @@ public class UserController {
   @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STUDENT')")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
     User user = userService.findById(id);
-    return new ResponseEntity < User > (user,HttpStatus.OK);
+    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<List<User>> getAllStudent(){
       List<User> students = userService.findAllStudent();
-      return new ResponseEntity<List<User>>(students, HttpStatus.OK);
+      return new ResponseEntity<>(students, HttpStatus.OK);
   }
 
   @PostMapping
@@ -53,7 +53,7 @@ public class UserController {
     user.setRoles(roles);
     user.setPassword(passwordEncoder.encode("123456"));
     userService.save(user);
-    return null;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
 }

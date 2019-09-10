@@ -29,7 +29,7 @@ public class SubjectController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Subject>> getAllSubject(){
-        return new ResponseEntity<>(subjectService.findAll(), HttpStatus.OK);
+        return new ResponseEntity< >(subjectService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
