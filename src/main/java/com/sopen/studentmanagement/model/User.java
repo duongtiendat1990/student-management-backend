@@ -1,5 +1,6 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sopen.studentmanagement.validators.annotation.UniqueEmail;
 import com.sopen.studentmanagement.validators.annotation.UniquePhoneNumber;
 import com.sopen.studentmanagement.validators.annotation.UniqueUsername;
@@ -25,6 +26,7 @@ public class User {
   @UniqueUsername
   private String username;
 
+  @JsonIgnore
   private String password;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

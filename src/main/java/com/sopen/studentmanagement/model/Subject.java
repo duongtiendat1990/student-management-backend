@@ -1,5 +1,6 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sopen.studentmanagement.validators.annotation.UniqueSubjectCode;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class Subject {
 
   private String note;
 
-  @OneToMany(cascade=CascadeType.ALL)
+  @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
   @NotEmpty
   @JoinColumn(name = "subject_id")
   private Set<Class> classes;

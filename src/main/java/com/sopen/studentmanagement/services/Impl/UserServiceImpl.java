@@ -2,8 +2,10 @@ package com.sopen.studentmanagement.services.Impl;
 
 import com.sopen.studentmanagement.model.User;
 import com.sopen.studentmanagement.repositories.UserRepository;
+import com.sopen.studentmanagement.security.services.UserPrinciple;
 import com.sopen.studentmanagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +25,20 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<User> findAllStudentByClassId(Long classId) {
+    return userRepository.findAllStudentByClassId(classId);
+  }
+
+  @Override
   public User findByEmailIgnoreCase(String email) {
     return findByEmailIgnoreCase(email);
+  }
+
+  @Override
+  public User getUserByAuth() {
+    Object userPrinciple = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Long user_id = ((UserPrinciple) userPrinciple).getId();
+    return findById(user_id);
   }
 
   @Override

@@ -10,7 +10,7 @@ public class Grade {
 
   @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "user_id")
-  private User user;
+  private User student;
 
   @ManyToOne(targetEntity = Subject.class)
   @JoinColumn(name = "subject_id")
@@ -29,12 +29,12 @@ public class Grade {
     Id = id;
   }
 
-  public User getUser() {
-    return user;
+  public User getStudent() {
+    return student;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setStudent(User student) {
+    this.student = student;
   }
 
   public Subject getSubject() {

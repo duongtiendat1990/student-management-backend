@@ -1,5 +1,9 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sopen.studentmanagement.validators.annotation.UniqueClassCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,8 +30,10 @@ public class Class {
 
   private String note;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @NotNull
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
   private Subject subject;
 
   public Class() {
