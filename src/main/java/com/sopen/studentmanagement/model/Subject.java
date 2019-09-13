@@ -1,9 +1,9 @@
 package com.sopen.studentmanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sopen.studentmanagement.validators.annotation.UniqueSubjectCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -22,7 +22,8 @@ public class Subject {
   private String code;
 
   @NotNull
-  private Double scoreFactor;
+  @Min(value = 1, message = "There must be at least 1 credit")
+  private Long credits;
 
   private String note;
 
@@ -58,12 +59,12 @@ public class Subject {
     this.code = code;
   }
 
-  public Double getScoreFactor() {
-    return scoreFactor;
+  public Long getCredits() {
+    return credits;
   }
 
-  public void setScoreFactor(Double scoreFactor) {
-    this.scoreFactor = scoreFactor;
+  public void setCredits(Long credits) {
+    this.credits = credits;
   }
 
   public String getNote() {

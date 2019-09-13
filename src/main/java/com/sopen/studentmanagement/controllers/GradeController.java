@@ -1,5 +1,6 @@
 package com.sopen.studentmanagement.controllers;
 
+import com.sopen.studentmanagement.message.response.GradesMessage;
 import com.sopen.studentmanagement.model.Grade;
 import com.sopen.studentmanagement.model.User;
 import com.sopen.studentmanagement.services.GradeService;
@@ -22,10 +23,10 @@ public class GradeController {
   @Autowired
   UserService userService;
 
-  @GetMapping("/student:{studentId}/subject:{subjectId}")
+  @GetMapping("/student:{studentId}/subject:{subjectId}/class:{classId}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<Grade> getByStudentAndSubject(@PathVariable Long studentId, @PathVariable Long subjectId){
-    Grade grade = gradeService.findByStudentIdAndSubjectId(studentId,subjectId);
+  public ResponseEntity<Grade> getByStudentAndSubject(@PathVariable Long studentId, @PathVariable Long subjectId, @PathVariable Long classId){
+    Grade grade = gradeService.findByStudentIdAndSubjectIdAndClassId(studentId,subjectId,classId);
     return new ResponseEntity<>(grade, HttpStatus.OK);
   }
   @PostMapping
@@ -38,8 +39,9 @@ public class GradeController {
   }
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STUDENT')")
-  public ResponseEntity<List<Grade>> getAllByStudent(){
+  public ResponseEntity<?> getByStudent(){
     User student = userService.getUserByAuth();
-    return new ResponseEntity<>(gradeService.findAllByStudent(student),HttpStatus.OK);
+    GradesMessage gradesMessage = new GradesMessage(gradeService.findAllByStudent(student),gradeService.getGPA(student));
+    return new ResponseEntity<>(gradesMessage,HttpStatus.OK);
   }
 }

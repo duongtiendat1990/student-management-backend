@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User findByEmailIgnoreCase(String email) {
-    return findByEmailIgnoreCase(email);
+    return userRepository.findByEmailIgnoreCase(email);
   }
 
   @Override

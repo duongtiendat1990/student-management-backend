@@ -6,7 +6,8 @@ import com.sopen.studentmanagement.model.User;
 import java.util.List;
 
 public interface GradeService {
-  Grade findByStudentIdAndSubjectId(Long studentId, Long subjectId);
+  Grade findByStudentIdAndSubjectIdAndClassId(Long studentId, Long subjectId, Long classId);
   List<Grade> findAllByStudent(User student);
+  Double getGPA(User student);
   void save(Grade model);
 }

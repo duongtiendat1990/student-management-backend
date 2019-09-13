@@ -18,10 +18,11 @@ public class GradeRepositoryImpl implements GradeRepository {
   EntityManager em;
 
   @Override
-  public Grade findByStudentIdAndSubjectId(Long studentId, Long subjectId) {
-    TypedQuery<Grade> query = em.createQuery("select g from Grade g where g.student.id = :studentId and g.subject.id = :subjectId",Grade.class);
+  public Grade findByStudentIdAndSubjectIdAndClassId(Long studentId, Long subjectId, Long classId) {
+    TypedQuery<Grade> query = em.createQuery("select g from Grade g where g.student.id = :studentId and g.subject.id = :subjectId and g.aClass.id = :classId",Grade.class);
     query.setParameter("studentId", studentId);
     query.setParameter("subjectId", subjectId);
+    query.setParameter("classId", classId);
     try {
       return query.getSingleResult();
     }catch (NoResultException e){
