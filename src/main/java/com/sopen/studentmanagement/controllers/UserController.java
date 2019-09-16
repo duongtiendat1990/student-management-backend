@@ -1,5 +1,6 @@
 package com.sopen.studentmanagement.controllers;
 
+import com.sopen.studentmanagement.message.request.ChangePasswordForm;
 import com.sopen.studentmanagement.message.response.ResponseMessage;
 import com.sopen.studentmanagement.model.*;
 import com.sopen.studentmanagement.model.Class;
@@ -87,4 +88,17 @@ public class UserController {
       return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @PostMapping("/change-password")
+  public ResponseEntity<?> changePassword(@RequestBody@Valid ChangePasswordForm changePasswordForm){
+    User user = userService.getUserByAuth();
+    if(user!=null){
+      if (passwordEncoder.matches(changePasswordForm.getOldPassword(),user.getPassword())){
+        user.setPassword(passwordEncoder.encode(changePasswordForm.getNewPassword()));
+        userService.save(user);
+        return new ResponseEntity<>(new ResponseMessage("Password changed successfully"), HttpStatus.OK);
+      }
+      return new ResponseEntity<>(new ResponseMessage("Wrong old password"), HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<>(new ResponseMessage("Please login to change password"), HttpStatus.FORBIDDEN);
+  }
 }

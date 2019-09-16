@@ -80,6 +80,6 @@ public class PermittedController {
       return new ResponseEntity<>(new ResponseMessage("Fail -> User's register occurred errors!"),
               HttpStatus.BAD_REQUEST);
     }
-
   }
+
 }
