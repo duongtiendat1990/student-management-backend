@@ -10,6 +10,7 @@ import com.sopen.studentmanagement.security.jwt.JwtProvider;
 import com.sopen.studentmanagement.security.services.EmailSenderService;
 import com.sopen.studentmanagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -69,8 +71,9 @@ public class PermittedController {
       if (user!=null){
         user.setEnabled(true);
         userService.save(user);
-        return new ResponseEntity<>(new ResponseMessage("User registered successfully!"),
-                HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("http://localhost:63342/frontend/app/index.html#!/login"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
       } else {
         return new ResponseEntity<>(new ResponseMessage("Fail -> No user with this email has been found!"),
                 HttpStatus.BAD_REQUEST);

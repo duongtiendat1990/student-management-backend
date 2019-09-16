@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.DayOfWeek;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -26,7 +28,16 @@ public class Class {
 
   @NotNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private Date time;
+  private Calendar startTime;
+
+  private Calendar endTime;
+
+  @NotNull
+  private Integer startPeriod;
+
+  private Integer endPeriod;
+
+  private DayOfWeek day;
 
   private String note;
 
@@ -63,13 +74,11 @@ public class Class {
     this.code = code;
   }
 
-  public Date getTime() {
-    return time;
+  public Calendar getStartTime() {
+    return startTime;
   }
 
-  public void setTime(Date time) {
-    this.time = time;
-  }
+  public void setStartTime(Calendar startTime) { this.startTime = startTime; }
 
   public String getNote() {
     return note;

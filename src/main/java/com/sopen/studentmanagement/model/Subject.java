@@ -1,6 +1,7 @@
 package com.sopen.studentmanagement.model;
 
 import com.sopen.studentmanagement.validators.annotation.UniqueSubjectCode;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -22,7 +23,7 @@ public class Subject {
   private String code;
 
   @NotNull
-  @Min(value = 1, message = "There must be at least 1 credit")
+  @Range(min = 1, max = 6, message = "Credits must be within 1 and 6")
   private Long credits;
 
   private String note;

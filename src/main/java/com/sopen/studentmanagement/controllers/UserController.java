@@ -75,21 +75,26 @@ public class UserController {
 
   @PutMapping
   @PreAuthorize("hasRole('ROLE_STUDENT')")
-  public ResponseEntity<?> enrollClass(@RequestBody Class aClass){
+  public ResponseEntity<?> enrollClass(@Valid @RequestBody Class aClass){
       User student = userService.getUserByAuth();
       Set<Class> classes = student.getClasses();
       Class aClass1 = classService.findById(aClass.getId());
-      classes.add(aClass1);
-      student.setClasses(classes);
-      Set<Subject> subjects = student.getSubjects();
-      subjects.add(aClass1.getSubject());
-      student.setSubjects(subjects);
-      userService.save(student);
-      return new ResponseEntity<>(HttpStatus.OK);
+      if (classes.add(aClass1)){
+        student.setClasses(classes);
+        Set<Subject> subjects = student.getSubjects();
+        if (subjects.add(aClass1.getSubject())){
+        student.setSubjects(subjects);
+        userService.save(student);
+        return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+      }
+      return new ResponseEntity<>(new ResponseMessage("You have already taken this class"), HttpStatus.BAD_REQUEST);
   }
 
   @PostMapping("/change-password")
-  public ResponseEntity<?> changePassword(@RequestBody@Valid ChangePasswordForm changePasswordForm){
+  @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STUDENT')")
+  public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordForm changePasswordForm){
     User user = userService.getUserByAuth();
     if(user!=null){
       if (passwordEncoder.matches(changePasswordForm.getOldPassword(),user.getPassword())){
