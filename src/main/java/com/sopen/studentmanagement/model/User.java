@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sopen.studentmanagement.validators.annotation.UniqueEmail;
 import com.sopen.studentmanagement.validators.annotation.UniquePhoneNumber;
 import com.sopen.studentmanagement.validators.annotation.UniqueUsername;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class User {
@@ -24,6 +23,7 @@ public class User {
 
   @Column(unique = true)
   @UniqueUsername
+  @NaturalId
   private String username;
 
   @JsonIgnore
@@ -44,6 +44,8 @@ public class User {
   @Email
   @UniqueEmail
   private String email;
+
+  private Class[][] timetable;
 
   private boolean enabled;
 
@@ -133,6 +135,14 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Class[][] getTimetable() {
+    return timetable;
+  }
+
+  public void setTimetable(Class[][] timetable) {
+    this.timetable = timetable;
   }
 
   public boolean isEnabled() {

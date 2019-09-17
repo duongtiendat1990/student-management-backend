@@ -16,9 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,9 +39,9 @@ public class UserController {
 
   @GetMapping("/search/class:{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<List<User>> findAllStudentByClass(@PathVariable Long id){
+  public ResponseEntity<List<User>> findAllStudentByClass(@PathVariable Long id) {
     List<User> students = userService.findAllStudentByClassId(id);
-    return new ResponseEntity<>(students,HttpStatus.OK);
+    return new ResponseEntity<>(students, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
@@ -55,49 +53,59 @@ public class UserController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<List<User>> getAllStudent(){
-      List<User> students = userService.findAllStudent();
-      return new ResponseEntity<>(students, HttpStatus.OK);
+  public ResponseEntity<List<User>> getAllStudent() {
+    List<User> students = userService.findAllStudent();
+    return new ResponseEntity<>(students, HttpStatus.OK);
   }
 
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<?> createStudent(@Valid @RequestBody User user){
+  public ResponseEntity<?> createStudent(@Valid @RequestBody User user) {
     Role role = roleRepository.findByName(RoleName.ROLE_STUDENT);
     Set<Role> roles = new HashSet<Role>();
     roles.add(role);
     user.setRoles(roles);
     user.setPassword(passwordEncoder.encode("123456"));
+    Class[][] timetable = new Class[6][6];
+    user.setTimetable(timetable);
     userService.save(user);
     emailSenderService.sendEmailCreateUser(user);
-    return new ResponseEntity<>(new ResponseMessage("Please notify student to login your email to confirm"),HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseMessage("Please notify student to login your email to confirm"),
+      HttpStatus.OK);
   }
 
   @PutMapping
   @PreAuthorize("hasRole('ROLE_STUDENT')")
-  public ResponseEntity<?> enrollClass(@Valid @RequestBody Class aClass){
-      User student = userService.getUserByAuth();
-      Set<Class> classes = student.getClasses();
-      Class aClass1 = classService.findById(aClass.getId());
-      if (classes.add(aClass1)){
-        student.setClasses(classes);
-        Set<Subject> subjects = student.getSubjects();
-        if (subjects.add(aClass1.getSubject())){
-        student.setSubjects(subjects);
-        userService.save(student);
-        return new ResponseEntity<>(HttpStatus.OK);
-        }
-
+  public ResponseEntity<?> enrollClass(@Valid @RequestBody Class aClass) {
+    User student = userService.getUserByAuth();
+    Set<Class> classes = student.getClasses();
+    final Class finalClass = classService.findById(aClass.getId());
+    for (Class aClass1 : classes) {
+      if (finalClass.equals(aClass1)) {
+        return new ResponseEntity<>(new ResponseMessage("You have already taken this class"), HttpStatus.BAD_REQUEST);
       }
-      return new ResponseEntity<>(new ResponseMessage("You have already taken this class"), HttpStatus.BAD_REQUEST);
+      if ((finalClass.getStartTime().after(aClass1.getStartTime()) && finalClass.getStartTime().before(
+        aClass1.getEndTime()) && finalClass.getSubject().equals(aClass1.getSubject()))) {
+        return new ResponseEntity<>(
+          new ResponseMessage("You have already taken class" + aClass1.getName() + "with same subject"),
+          HttpStatus.CONFLICT);
+      }
+    }
+    classes.add(aClass);
+    student.setClasses(classes);
+    Set<Subject> subjects = student.getSubjects();
+    subjects.add(aClass.getSubject());
+    student.setSubjects(subjects);
+    userService.save(student);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping("/change-password")
   @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STUDENT')")
-  public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordForm changePasswordForm){
+  public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordForm changePasswordForm) {
     User user = userService.getUserByAuth();
-    if(user!=null){
-      if (passwordEncoder.matches(changePasswordForm.getOldPassword(),user.getPassword())){
+    if (user != null) {
+      if (passwordEncoder.matches(changePasswordForm.getOldPassword(), user.getPassword())) {
         user.setPassword(passwordEncoder.encode(changePasswordForm.getNewPassword()));
         userService.save(user);
         return new ResponseEntity<>(new ResponseMessage("Password changed successfully"), HttpStatus.OK);

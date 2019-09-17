@@ -4,8 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.sopen.studentmanagement.validators.annotation.AppropriateStartPeriod;
+import com.sopen.studentmanagement.validators.annotation.RejectWeekend;
 import com.sopen.studentmanagement.validators.annotation.UniqueClassCode;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreFilter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,20 +29,22 @@ public class Class {
   @Column(unique = true)
   @NotNull
   @UniqueClassCode
+  @NaturalId
   private String code;
 
   @NotNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  @RejectWeekend
   private Calendar startTime;
 
   private Calendar endTime;
 
   @NotNull
+  @Range(min = 1,max = 6,message = "Start period must be within 1 and 6")
+  @AppropriateStartPeriod
   private Integer startPeriod;
 
   private Integer endPeriod;
-
-  private DayOfWeek day;
 
   private String note;
 
@@ -79,6 +86,30 @@ public class Class {
   }
 
   public void setStartTime(Calendar startTime) { this.startTime = startTime; }
+
+  public Calendar getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(Calendar endTime) {
+    this.endTime = endTime;
+  }
+
+  public Integer getStartPeriod() {
+    return startPeriod;
+  }
+
+  public void setStartPeriod(Integer startPeriod) {
+    this.startPeriod = startPeriod;
+  }
+
+  public Integer getEndPeriod() {
+    return endPeriod;
+  }
+
+  public void setEndPeriod(Integer endPeriod) {
+    this.endPeriod = endPeriod;
+  }
 
   public String getNote() {
     return note;

@@ -8,6 +8,7 @@ import com.sopen.studentmanagement.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +35,10 @@ public class SubjectServiceImpl implements SubjectService {
     public void save(Subject subject) {
         for (Class aClass: subject.getClasses()) {
             aClass.setSubject(subject);
+            aClass.setEndPeriod((int) (aClass.getStartPeriod() + subject.getCredits()));
+            Calendar calendar = aClass.getStartTime();
+            calendar.add(Calendar.MONTH, 5);
+            aClass.setEndTime(calendar);
         }
         subjectRepository.save(subject);
     }
