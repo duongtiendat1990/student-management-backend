@@ -25,5 +25,4 @@ public class ClassController {
   public ResponseEntity<List<Class>> getAllClass(){
     return new ResponseEntity<>(classService.findAll(), HttpStatus.OK);
   }
-
 }

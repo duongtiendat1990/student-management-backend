@@ -41,7 +41,7 @@ public class SubjectController {
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
   public ResponseEntity updateSubject(@PathVariable Long id, @Valid @RequestBody Subject subject) {
-    if (id.equals(subject.getSubjectId())) {
+    if (id.equals(subject.getId())) {
       subjectService.save(subject);
       return new ResponseEntity(HttpStatus.OK);
     }

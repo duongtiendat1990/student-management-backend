@@ -1,6 +1,6 @@
 package com.sopen.studentmanagement.validators.annotation;
 
-import com.sopen.studentmanagement.validators.RejectWeekendValidator;
+import com.sopen.studentmanagement.validators.AppropriateStartPeriodValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,9 +9,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = RejectWeekendValidator.class)
+@Constraint(validatedBy = AppropriateStartPeriodValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD })
+@Target({ElementType.TYPE })
 public @interface AppropriateStartPeriod {
   public String message() default "There must be enough period left for class!";
 

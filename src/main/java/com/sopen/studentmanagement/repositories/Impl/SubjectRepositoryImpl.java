@@ -36,7 +36,7 @@ public class SubjectRepositoryImpl implements SubjectRepository {
 
     @Override
     public void save(Subject model) {
-        if(model.getSubjectId() != null){
+        if(model.getId() != null){
             em.merge(model);
         } else {
             em.persist(model);

@@ -1,6 +1,7 @@
 package com.sopen.studentmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sopen.studentmanagement.validators.annotation.AppropriateStartPeriod;
 import com.sopen.studentmanagement.validators.annotation.RejectWeekend;
@@ -16,6 +17,7 @@ import java.util.Calendar;
 @Entity
 @JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
   property = "id")
+@AppropriateStartPeriod
 public class Class {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +40,6 @@ public class Class {
 
   @NotNull
   @Range(min = 1, max = 6, message = "Start period must be within 1 and 6")
-  @AppropriateStartPeriod
   private Integer startPeriod;
 
   private Integer endPeriod;
@@ -47,8 +48,9 @@ public class Class {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @NotNull
-//  @JsonIdentityInfo(scope = Subject.class, generator = ObjectIdGenerators.PropertyGenerator.class,
-//    property = "id")
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
+  @JsonIgnoreProperties(value = "classes", allowSetters = true)
   private Subject subject;
 
   public Class() {
