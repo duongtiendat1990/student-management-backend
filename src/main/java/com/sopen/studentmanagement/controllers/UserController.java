@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.DayOfWeek;
 import java.util.*;
 
 @RestController
@@ -37,12 +38,6 @@ public class UserController {
   @Autowired
   private EmailSenderService emailSenderService;
 
-  @GetMapping("/search/class:{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<List<User>> findAllStudentByClass(@PathVariable Long id) {
-    List<User> students = userService.findAllStudentByClassId(id);
-    return new ResponseEntity<>(students, HttpStatus.OK);
-  }
 
   @GetMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STUDENT')")
@@ -53,8 +48,14 @@ public class UserController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<List<User>> getAllStudent() {
-    List<User> students = userService.findAllStudent();
+  public ResponseEntity<List<User>> getAllStudent(@RequestParam(required = false) Long classId) {
+    List<User> students;
+    if (classId != null) {
+      students = userService.findAllStudentByClassId(classId);
+    }
+    else {
+      students = userService.findAllStudent();
+    }
     return new ResponseEntity<>(students, HttpStatus.OK);
   }
 
@@ -77,27 +78,14 @@ public class UserController {
   @PutMapping
   @PreAuthorize("hasRole('ROLE_STUDENT')")
   public ResponseEntity<?> enrollClass(@Valid @RequestBody Class aClass) {
-    User student = userService.getUserByAuth();
-    Set<Class> classes = student.getClasses();
-    final Class finalClass = classService.findById(aClass.getId());
-    for (Class aClass1 : classes) {
-      if (finalClass.equals(aClass1)) {
-        return new ResponseEntity<>(new ResponseMessage("You have already taken this class"), HttpStatus.BAD_REQUEST);
-      }
-      if ((finalClass.getStartTime().after(aClass1.getStartTime()) && finalClass.getStartTime().before(
-        aClass1.getEndTime()) && finalClass.getSubject().equals(aClass1.getSubject()))) {
-        return new ResponseEntity<>(
-          new ResponseMessage("You have already taken class" + aClass1.getName() + "with same subject"),
-          HttpStatus.CONFLICT);
-      }
+    try {
+      userService.checkConflict(aClass);
+      userService.enrollClass(aClass);
+      return new ResponseEntity<>(HttpStatus.OK);
     }
-    classes.add(aClass);
-    student.setClasses(classes);
-    Set<Subject> subjects = student.getSubjects();
-    subjects.add(aClass.getSubject());
-    student.setSubjects(subjects);
-    userService.save(student);
-    return new ResponseEntity<>(HttpStatus.OK);
+    catch (ResponseMessage message) {
+      return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+    }
   }
 
   @PostMapping("/change-password")

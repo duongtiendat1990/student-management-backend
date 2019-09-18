@@ -23,12 +23,6 @@ public class GradeController {
   @Autowired
   UserService userService;
 
-  @GetMapping("/student:{studentId}/subject:{subjectId}/class:{classId}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<Grade> getByStudentAndSubject(@PathVariable Long studentId, @PathVariable Long subjectId, @PathVariable Long classId){
-    Grade grade = gradeService.findByStudentIdAndSubjectIdAndClassId(studentId,subjectId,classId);
-    return new ResponseEntity<>(grade, HttpStatus.OK);
-  }
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> saveGrades(@RequestBody List<Grade> grades){
@@ -38,8 +32,12 @@ public class GradeController {
     return new ResponseEntity(HttpStatus.OK);
   }
   @GetMapping
-  @PreAuthorize("hasRole('ROLE_STUDENT')")
-  public ResponseEntity<?> getByStudent(){
+  @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
+  public ResponseEntity<?> getByStudent(@RequestParam(required = false)  Long studentId, @RequestParam(required = false) Long subjectId, @RequestParam(required = false) Long classId){
+    if (studentId!=null && subjectId!=null && classId!=null){
+      Grade grade = gradeService.findByStudentIdAndSubjectIdAndClassId(studentId,subjectId,classId);
+      return new ResponseEntity<>(grade, HttpStatus.OK);
+    }
     User student = userService.getUserByAuth();
     GradesMessage gradesMessage = new GradesMessage(gradeService.findAllByStudent(student),gradeService.getGPA(student));
     return new ResponseEntity<>(gradesMessage,HttpStatus.OK);

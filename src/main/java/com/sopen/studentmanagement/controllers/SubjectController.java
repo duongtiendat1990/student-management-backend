@@ -1,7 +1,7 @@
 package com.sopen.studentmanagement.controllers;
 
+import com.sopen.studentmanagement.message.response.ResponseMessage;
 import com.sopen.studentmanagement.model.Subject;
-import com.sopen.studentmanagement.services.ClassService;
 import com.sopen.studentmanagement.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class SubjectController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> createSubject(@Valid @RequestBody Subject subject) {
     subjectService.save(subject);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseMessage("Subject has been created successfully"), HttpStatus.OK);
   }
 
   @GetMapping
@@ -41,7 +41,7 @@ public class SubjectController {
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")
   public ResponseEntity updateSubject(@PathVariable Long id, @Valid @RequestBody Subject subject) {
-    if (id.equals(subject.getId())) {
+    if (id.equals(subject.getSubjectId())) {
       subjectService.save(subject);
       return new ResponseEntity(HttpStatus.OK);
     }

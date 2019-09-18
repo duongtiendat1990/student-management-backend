@@ -1,7 +1,7 @@
 package com.sopen.studentmanagement.message.response;
 
 
-public class ResponseMessage {
+public class ResponseMessage extends Exception {
   private String message;
 
   public ResponseMessage(String message) {

@@ -1,20 +1,24 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sopen.studentmanagement.validators.annotation.UniqueSubjectCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(scope = Subject.class,
+  generator = ObjectIdGenerators.PropertyGenerator.class,
+  property = "id")
 public class Subject {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long Id;
+  @Column(name = "id")
+  private Long subjectId;
 
   private String name;
 
@@ -30,20 +34,21 @@ public class Subject {
 
   private String note;
 
-  @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-  @NotEmpty
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(name = "subject_id")
+//  @JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "id")
   private Set<Class> classes;
 
   public Subject() {
   }
 
-  public Long getId() {
-    return Id;
+  public Long getSubjectId() {
+    return subjectId;
   }
 
-  public void setId(Long id) {
-    Id = id;
+  public void setSubjectId(Long subjectId) {
+    this.subjectId = subjectId;
   }
 
   public String getName() {

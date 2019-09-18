@@ -1,8 +1,6 @@
 package com.sopen.studentmanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sopen.studentmanagement.validators.annotation.AppropriateStartPeriod;
 import com.sopen.studentmanagement.validators.annotation.RejectWeekend;
@@ -10,19 +8,18 @@ import com.sopen.studentmanagement.validators.annotation.UniqueClassCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreFilter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.DayOfWeek;
 import java.util.Calendar;
-import java.util.Date;
 
 @Entity
+@JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+  property = "id")
 public class Class {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long Id;
+  private Long id;
 
   private String name;
 
@@ -40,7 +37,7 @@ public class Class {
   private Calendar endTime;
 
   @NotNull
-  @Range(min = 1,max = 6,message = "Start period must be within 1 and 6")
+  @Range(min = 1, max = 6, message = "Start period must be within 1 and 6")
   @AppropriateStartPeriod
   private Integer startPeriod;
 
@@ -50,19 +47,19 @@ public class Class {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @NotNull
-  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "id")
+//  @JsonIdentityInfo(scope = Subject.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "id")
   private Subject subject;
 
   public Class() {
   }
 
   public Long getId() {
-    return Id;
+    return id;
   }
 
   public void setId(Long id) {
-    Id = id;
+    this.id = id;
   }
 
   public String getName() {
@@ -85,7 +82,9 @@ public class Class {
     return startTime;
   }
 
-  public void setStartTime(Calendar startTime) { this.startTime = startTime; }
+  public void setStartTime(Calendar startTime) {
+    this.startTime = startTime;
+  }
 
   public Calendar getEndTime() {
     return endTime;
