@@ -77,7 +77,7 @@ public class UserController {
 
   @PutMapping
   @PreAuthorize("hasRole('ROLE_STUDENT')")
-  public ResponseEntity<?> enrollClass(@Valid @RequestBody Class aClass) {
+  public ResponseEntity<?> enrollClass(@RequestBody Class aClass) {
     try {
       userService.checkConflict(aClass);
       userService.enrollClass(aClass);
@@ -101,5 +101,11 @@ public class UserController {
       return new ResponseEntity<>(new ResponseMessage("Wrong old password"), HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<>(new ResponseMessage("Please login to change password"), HttpStatus.FORBIDDEN);
+  }
+  @GetMapping("/timetable")
+  @PreAuthorize("hasRole('ROLE_STUDENT')")
+  public ResponseEntity<?> getTimetable(){
+    User student = userService.getUserByAuth();
+    return new ResponseEntity<>(student.getTimetable(), HttpStatus.OK);
   }
 }

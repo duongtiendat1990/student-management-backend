@@ -102,15 +102,16 @@ public class UserServiceImpl implements UserService {
   public void enrollClass(Class aClass){
     User student = getUserByAuth();
     Set<Class> classes = student.getClasses();
-    classes.add(aClass);
+    Class realClass = classService.findById(aClass.getId());
+    classes.add(realClass);
     student.setClasses(classes);
     Set<Subject> subjects = student.getSubjects();
-    subjects.add(aClass.getSubject());
+    subjects.add(realClass.getSubject());
     student.setSubjects(subjects);
     Class[][] timetable = student.getTimetable();
-    int day = aClass.getStartTime().get(Calendar.DAY_OF_WEEK);
-    for (int i = aClass.getStartPeriod()-1; i <aClass.getEndPeriod() ; i++) {
-      timetable[day-2][i] = aClass;
+    int day = realClass.getStartTime().get(Calendar.DAY_OF_WEEK);
+    for (int i = realClass.getStartPeriod()-1; i <realClass.getEndPeriod() ; i++) {
+      timetable[day-2][i] = realClass;
     }
     student.setTimetable(timetable);
     save(student);

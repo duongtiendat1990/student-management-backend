@@ -1,6 +1,10 @@
 package com.sopen.studentmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sopen.studentmanagement.validators.annotation.UniqueEmail;
 import com.sopen.studentmanagement.validators.annotation.UniquePhoneNumber;
 import com.sopen.studentmanagement.validators.annotation.UniqueUsername;
@@ -11,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.io.IOException;
 import java.util.*;
 
 @Entity
@@ -45,19 +50,20 @@ public class User {
   @UniqueEmail
   private String email;
 
-  private Class[][] timetable;
+  @Lob
+  private String timetable;
 
   private boolean enabled;
 
   private String note;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "student_class",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "class_id"))
   private Set<Class> classes = new HashSet<>();
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "student_subject",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
@@ -138,11 +144,24 @@ public class User {
   }
 
   public Class[][] getTimetable() {
-    return timetable;
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.readValue(timetable,Class[][].class);
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public void setTimetable(Class[][] timetable) {
-    this.timetable = timetable;
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      this.timetable = mapper.writeValueAsString(timetable);
+    }
+    catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
   }
 
   public boolean isEnabled() {
