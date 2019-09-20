@@ -13,9 +13,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-@JsonIdentityInfo(scope = Subject.class,
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id")
+//@JsonIdentityInfo(scope = Subject.class,
+//  generator = ObjectIdGenerators.PropertyGenerator.class,
+//  property = "id")
 public class Subject {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,10 +38,10 @@ public class Subject {
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(name = "subject_id")
-  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+  @JsonIdentityInfo ( scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
   @JsonIgnoreProperties(value = "subject", allowSetters = true)
-  @Valid
+//  @Valid
   private Set<Class> classes;
 
   public Subject() {

@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 
 @Entity
-@JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id")
+//@JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//  property = "id")
 @AppropriateStartPeriod
 public class Class {
   @Id
@@ -49,7 +49,7 @@ public class Class {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @NotNull
-  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+  @JsonIdentityInfo( scope = Subject.class,generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
   @JsonIgnoreProperties(value = "classes", allowSetters = true)
   private Subject subject;

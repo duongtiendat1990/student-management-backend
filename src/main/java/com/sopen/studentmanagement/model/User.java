@@ -1,6 +1,9 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -61,12 +64,18 @@ public class User {
   @JoinTable(name = "student_class",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "class_id"))
+  @JsonIgnoreProperties(value = "subject", allowSetters = true)
+  @JsonIdentityInfo ( scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
   private Set<Class> classes = new HashSet<>();
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "student_subject",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
+  @JsonIgnoreProperties(value = "classes", allowSetters = true)
+  @JsonIdentityInfo( scope = Subject.class,generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
   private Set<Subject> subjects = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)

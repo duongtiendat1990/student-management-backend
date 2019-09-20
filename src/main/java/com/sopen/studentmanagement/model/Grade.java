@@ -1,5 +1,8 @@
 package com.sopen.studentmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -13,22 +16,30 @@ public class Grade {
 
   @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "user_id")
+  @JsonIgnoreProperties(value = {"classes","subjects","timetable"})
   private User student;
+
 
   @ManyToOne(targetEntity = Subject.class)
   @JoinColumn(name = "subject_id")
+//  @JsonIdentityInfo( scope = Subject.class,generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "id")
+  @JsonIgnoreProperties(value = "classes")
   private Subject subject;
 
   @ManyToOne(targetEntity = Class.class)
   @JoinColumn(name = "class_id")
-  private Class aClass;
+//  @JsonIdentityInfo(scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "id")
+  @JsonIgnoreProperties(value = "subject")
+  private Class klass;
 
-  public Class getAClass() {
-    return aClass;
+  public Class getKlass() {
+    return klass;
   }
 
-  public void setAClass(Class aClass) {
-    this.aClass = aClass;
+  public void setKlass(Class klass) {
+    this.klass = klass;
   }
 
   @NotNull
