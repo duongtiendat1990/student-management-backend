@@ -51,7 +51,7 @@ public class Class {
   @NotNull
   @JsonIdentityInfo( scope = Subject.class,generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
-  @JsonIgnoreProperties(value = "classes", allowSetters = true)
+  @JsonIgnoreProperties(value = "classes")
   private Subject subject;
 
   public Class() {

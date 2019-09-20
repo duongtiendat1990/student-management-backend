@@ -41,7 +41,7 @@ public class Subject {
   @JsonIdentityInfo ( scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
   @JsonIgnoreProperties(value = "subject", allowSetters = true)
-//  @Valid
+  @Valid
   private Set<Class> classes;
 
   public Subject() {
