@@ -36,7 +36,7 @@ public class SubjectServiceImpl implements SubjectService {
         for (Class aClass: subject.getClasses()) {
             aClass.setSubject(subject);
             aClass.setEndPeriod((int) (aClass.getStartPeriod() + subject.getCredits()));
-            Calendar calendar = aClass.getStartTime();
+            Calendar calendar = (Calendar) aClass.getStartTime().clone();
             calendar.add(Calendar.MONTH, 5);
             aClass.setEndTime(calendar);
         }
