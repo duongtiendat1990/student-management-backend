@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class GradeController {
 
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<?> saveGrades(@RequestBody List<Grade> grades){
+  public ResponseEntity<?> saveGrades(@Valid @RequestBody List<Grade> grades){
     grades.forEach(grade -> {
       gradeService.save(grade);
     });

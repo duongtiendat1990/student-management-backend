@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 
@@ -35,6 +36,7 @@ public class Class {
   @NotNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @RejectWeekend
+  @Future(message = "Start date must be in future   ")
   private Calendar startTime;
 
   private Calendar endTime;
