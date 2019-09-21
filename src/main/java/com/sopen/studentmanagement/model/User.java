@@ -38,7 +38,7 @@ public class User {
   private String password;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  @Past
+  @Past(message = "Birthday must be in the past")
   private Date birthday;
 
   private String hometown;
@@ -54,6 +54,7 @@ public class User {
   private String email;
 
   @Lob
+  @Column(columnDefinition = "LONGBLOB")
   private String timetable;
 
   private boolean enabled;
