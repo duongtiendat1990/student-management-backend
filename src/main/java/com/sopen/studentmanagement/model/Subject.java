@@ -40,7 +40,7 @@ public class Subject {
   @JoinColumn(name = "subject_id")
   @JsonIdentityInfo ( scope = Class.class, generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
-  @JsonIgnoreProperties(value = "subject", allowSetters = true)
+  @JsonIgnoreProperties(value = "subject",allowGetters = true, allowSetters = true) //need allowSetters and allowGetters for create subject
   @Valid
   private Set<Class> classes;
 

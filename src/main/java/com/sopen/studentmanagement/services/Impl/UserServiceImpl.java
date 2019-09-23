@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<User> findAllStudentBySubjectId(Long subjectId) {
+    return userRepository.findAllStudentBySubjectId(subjectId);
+  }
+
+  @Override
   public List<User> findAllStudentByClassId(Long classId) {
     return userRepository.findAllStudentByClassId(classId);
   }
@@ -82,19 +87,22 @@ public class UserServiceImpl implements UserService {
       if (finalClass.equals(aClass1)) {
         throw new ResponseMessage("You have already taken this class");
       }
-      if ((startTime.after(aClass1.getStartTime()) && startTime.before(
-        aClass1.getEndTime()) && finalClass.getSubject().equals(aClass1.getSubject()))) {
-        throw new ResponseMessage("You have already taken class" + aClass1.getName() + "with same subject");
+//      if ((startTime.after(aClass1.getStartTime()) && startTime.before(
+//        aClass1.getEndTime()) && finalClass.getSubject().equals(aClass1.getSubject()))) {
+//        throw new ResponseMessage("You have already taken class " + aClass1.getName() + " with same subject");
+//      }
+      if ((finalClass.getSubject().equals(aClass1.getSubject()))) {
+        throw new ResponseMessage("You have already taken class " + aClass1.getName() + " with same subject");
       }
     }
-    Class[][] timetable = student.getTimetable();
+     Class[][] timetable = student.getTimetable();
     int day = startTime.get(Calendar.DAY_OF_WEEK);
     Class[] timetableDay = timetable[day - 2];
     for (int i = finalClass.getStartPeriod() - 1; i < finalClass.getEndPeriod(); i++) {
       if (timetableDay[i] != null) {
         throw new ResponseMessage(
           "This class conflicts timetable with class" + timetableDay[i].getName() + " on " + DayOfWeek.of(
-            startTime.get(Calendar.DAY_OF_WEEK) - 1) + " at period" + (i + 1));
+            startTime.get(Calendar.DAY_OF_WEEK) - 1) + " at period " + (i + 1));
       }
     }
   }

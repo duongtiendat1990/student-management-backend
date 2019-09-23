@@ -19,6 +19,11 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    public List<Class> findAllBySubjectId(Long subjectId) {
+        return classRepository.findAllBySubjectId(subjectId);
+    }
+
+    @Override
     public Class findById(Long id) {
         return classRepository.findById(id);
     }

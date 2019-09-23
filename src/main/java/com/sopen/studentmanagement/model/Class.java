@@ -36,7 +36,7 @@ public class Class {
   @NotNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @RejectWeekend
-  @Future(message = "Start date must be in future   ")
+  @Future(message = "Start date must be in future")
   private Calendar startTime;
 
   private Calendar endTime;
@@ -53,7 +53,7 @@ public class Class {
   @NotNull
   @JsonIdentityInfo( scope = Subject.class,generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
-  @JsonIgnoreProperties(value = "classes")
+  @JsonIgnoreProperties(value = "classes", allowGetters = true)
   private Subject subject;
 
   public Class() {

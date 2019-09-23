@@ -81,7 +81,7 @@ public class UserController {
     try {
       userService.checkConflict(aClass);
       userService.enrollClass(aClass);
-      return new ResponseEntity<>(HttpStatus.OK);
+      return new ResponseEntity<>(new ResponseMessage("Enroll class " + aClass.getName() + " success fully"),HttpStatus.OK);
     }
     catch (ResponseMessage message) {
       return new ResponseEntity<>(message, HttpStatus.CONFLICT);

@@ -7,6 +7,8 @@ import java.util.List;
 public interface ClassService {
     List<Class> findAll();
 
+    List<Class> findAllBySubjectId(Long subjectId);
+
     Class findById(Long id);
 
     void save(Class model);

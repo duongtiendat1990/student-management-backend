@@ -36,7 +36,8 @@ public class EmailSenderService {
     mailMessage.setTo(user.getEmail());
     mailMessage.setSubject("Complete Registration!");
     mailMessage.setFrom(mailSenderName);
-    mailMessage.setText("To confirm your account, please click here : "
+    mailMessage.setText("Teacher has created for you an account with \n Username: " + user.getUsername() +
+      "Password: 123456 \n" + "To confirm your account, please click here : "
       + "http://localhost:8080/api/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
     sendEmail(mailMessage);

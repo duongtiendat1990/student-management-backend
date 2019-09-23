@@ -1,6 +1,7 @@
 package com.sopen.studentmanagement.controllers;
 
 import com.sopen.studentmanagement.message.response.GradesMessage;
+import com.sopen.studentmanagement.message.response.ResponseMessage;
 import com.sopen.studentmanagement.model.Grade;
 import com.sopen.studentmanagement.model.User;
 import com.sopen.studentmanagement.services.GradeService;
@@ -30,7 +31,7 @@ public class GradeController {
     grades.forEach(grade -> {
       gradeService.save(grade);
     });
-    return new ResponseEntity(HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseMessage("Grade all student successfully"),HttpStatus.OK);
   }
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')")

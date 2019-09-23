@@ -100,6 +100,13 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public List<User> findAllStudentBySubjectId(Long subjectId) {
+    Query query = em.createNativeQuery("select u.* from User u inner join student_subject ss on ss.student_id = u.id inner join subject s on s.id = ss.subject_id where s.id = ?", User.class);
+    query.setParameter(1, subjectId);
+    return query.getResultList();
+  }
+
+  @Override
   public List<User> findAllStudentByClassId(Long classId) {
     Query query = em.createNativeQuery("select u.* from User u inner join student_class sc on sc.student_id = u.id inner join class c on c.id = sc.class_id where c.id = ?", User.class);
     query.setParameter(1, classId);

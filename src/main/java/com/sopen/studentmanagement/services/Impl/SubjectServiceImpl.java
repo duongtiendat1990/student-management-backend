@@ -35,7 +35,7 @@ public class SubjectServiceImpl implements SubjectService {
     public void save(Subject subject) {
         for (Class aClass: subject.getClasses()) {
             aClass.setSubject(subject);
-            aClass.setEndPeriod((int) (aClass.getStartPeriod() + subject.getCredits()));
+            aClass.setEndPeriod((int) (aClass.getStartPeriod() + subject.getCredits()-1));
             Calendar calendar = (Calendar) aClass.getStartTime().clone();
             calendar.add(Calendar.MONTH, 5);
             aClass.setEndTime(calendar);

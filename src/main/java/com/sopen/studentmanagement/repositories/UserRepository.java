@@ -12,6 +12,7 @@ public interface UserRepository extends Repository<User>{
   User findByPhoneNumber(String phoneNumber);
   User findByEmailIgnoreCase(String email);
   List<User> findAllStudent();
+  List<User> findAllStudentBySubjectId(Long subjectId);
   List<User> findAllStudentByClassId(Long classId);
 
   boolean existsByUsername (String username);

@@ -61,4 +61,11 @@ public class ClassRepositoryImpl implements ClassRepository {
             return null;
         }
     }
+
+    @Override
+    public List<Class> findAllBySubjectId(Long subjectId) {
+        TypedQuery<Class> query = em.createQuery("select c from Class c where c.subject.id=:subjectId", Class.class);
+        query.setParameter("subjectId", subjectId);
+        return query.getResultList();
+    }
 }

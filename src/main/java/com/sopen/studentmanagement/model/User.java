@@ -54,8 +54,7 @@ public class User {
   private String email;
 
   @Lob
-  @Column(columnDefinition = "LONGBLOB")
-  private String timetable;
+  private byte[] timetable;
 
   private boolean enabled;
 
@@ -167,7 +166,7 @@ public class User {
   public void setTimetable(Class[][] timetable) {
     ObjectMapper mapper = new ObjectMapper();
     try {
-      this.timetable = mapper.writeValueAsString(timetable);
+      this.timetable = mapper.writeValueAsBytes(timetable);
     }
     catch (JsonProcessingException e) {
       e.printStackTrace();

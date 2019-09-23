@@ -11,6 +11,8 @@ public interface UserService {
 
   List<User> findAllStudent();
 
+  List<User> findAllStudentBySubjectId(Long subjectId);
+
   List<User> findAllStudentByClassId(Long classId);
 
   User findByEmailIgnoreCase(String email);
